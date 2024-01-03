@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Event extends Model
 {
     use HasFactory;
-
+    protected $fillable = ['name', 'start_event', 'end_event', 'user_id'];
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
