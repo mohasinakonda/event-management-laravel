@@ -4,40 +4,22 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Resources\EventResource;
+use App\Http\Traits\CanLoadRelations;
 use App\Models\Event;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use CanLoadRelations;
+    protected array $relations = ['user', 'attendees', 'attendees.user'];
     public function index()
     {
-        $query = Event::query();
-        $relations = ['user', 'attendees', 'attendees.user'];
-        foreach ($relations as $relation) {
-            $query->when(
-                $this->shouldIncludeRelation($relation),
-                fn($q) => $q->with($relation)
-            );
-        }
+        $query = $this->loadRelation(Event::query());
         return EventResource::collection($query->latest()->paginate());
 
     }
 
-    protected function shouldIncludeRelation($relation)
-    {
-        $include = request()->query('include');
 
-        if (!$include) {
-            return false;
-        }
-        $relations = array_map('trim', explode(',', $include));
-        return in_array($relation, $relations);
-
-
-    }
     public function create()
     {
         //
