@@ -43,7 +43,7 @@ class EventController extends Controller
             ]
 
         );
-        return new EventResource($event);
+        return new EventResource($this->loadRelation($event));
     }
 
     /**
@@ -51,8 +51,8 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        $event->load('user', 'attendees');
-        return new EventResource($event);
+        // $event->load('user', 'attendees');
+        return new EventResource($this->loadRelation($event));
     }
 
     /**
@@ -76,7 +76,7 @@ class EventController extends Controller
                 'end_event' => 'sometimes|date|after:start_event'
             ])
         ]);
-        return new EventResource($event);
+        return new EventResource($this->loadRelation($event));
     }
 
     /**
