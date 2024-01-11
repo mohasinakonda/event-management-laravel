@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\AttendeesController;
 use App\Http\Controllers\EventController;
 use Illuminate\Http\Request;
@@ -20,6 +21,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return;
 });
 Route::apiResource('events', EventController::class);
-Route::apiResource('events.attendees', AttendeesController::class)->scoped([
-    'attendee' => 'event'
-]);
+Route::apiResource('events.attendees', AttendeesController::class)->scoped();
+Route::post('/login', [AuthController::class, 'login']);
